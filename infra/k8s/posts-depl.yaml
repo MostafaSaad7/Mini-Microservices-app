@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+# number of pods to be created to run specified image
+  replicas: 1
+  # selector is used to find the pod that will be created
+  selector:
+  # find all pods with label app: posts >> note app can be any name like saad : posts
+    matchLabels:
+      app: posts
+  # template is the pod definition
+  template:
+  # metadata is data about the pod
+    metadata:
+    # labels is the label of the pod
+      labels:
+        app: posts
+    spec:
+    # containers is the list of containers that will be created inside the pod
+      containers:
+        - name: posts
+          image: mostafasaad/posts
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-srv
+spec:
+  type: ClusterIP
+  # type: NodePort
+  # type: LoadBalancer
+  ports:
+    - name: posts
+      protocol: TCP
+      # node port is the port that will be exposed to the outside world
+      port: 4000
+      # target port is the port that the pod is listening to
+      targetPort: 4000
+  # selector is the label of the pod
+  selector:
+    app: posts

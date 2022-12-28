@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: posts
+spec:
+# containers her is an array 
+# - means an element in array entity 
+  containers:
+    - name: posts
+      image: mostafasaad/posts:0.0.1

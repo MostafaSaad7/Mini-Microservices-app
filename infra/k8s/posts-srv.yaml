@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-srv
+spec:
+  # type: ClusterIP
+  type: NodePort
+  # type: LoadBalancer
+  ports:
+    - name: posts
+      protocol: TCP
+      # node port is the port that will be exposed to the outside world
+      port: 4000
+      # target port is the port that the pod is listening to
+      targetPort: 4000
+  # selector is the label of the pod
+  selector:
+    app: posts

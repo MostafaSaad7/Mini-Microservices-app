@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-bus-depl
+spec:
+# number of pods to be created to run specified image
+  replicas: 1
+  # selector is used to find the pod that will be created
+  selector:
+  # find all pods with label app: event-bus >> note app can be any name like saad : event-bus
+    matchLabels:
+      app: event-bus
+  # template is the pod definition
+  template:
+  # metadata is data about the pod
+    metadata:
+    # labels is the label of the pod
+      labels:
+        app: event-bus
+    spec:
+    # containers is the list of containers that will be created inside the pod
+      containers:
+        - name: event-bus
+          image: mostafasaad/event-bus
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-bus-srv
+spec:
+  type: ClusterIP
+  # type: NodePort
+  # type: LoadBalancer
+  ports:
+    - name: event-bus
+      protocol: TCP
+      # node port is the port that will be exposed to the outside world
+      port: 4005
+      # target port is the port that the pod is listening to
+      targetPort: 4005
+  # selector is the label of the pod
+  selector:
+    app: event-bus
