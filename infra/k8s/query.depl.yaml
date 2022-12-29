@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-depl
+spec:
+# number of pods to be created to run specified image
+  replicas: 1
+  # selector is used to find the pod that will be created
+  selector:
+  # find all pods with label app: query >> note app can be any name like saad : query
+    matchLabels:
+      app: query
+  # template is the pod definition
+  template:
+  # metadata is data about the pod
+    metadata:
+    # labels is the label of the pod
+      labels:
+        app: query
+    spec:
+    # containers is the list of containers that will be created inside the pod
+      containers:
+        - name: query
+          image: mostafasaad/query
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  type: ClusterIP
+  # type: NodePort
+  # type: LoadBalancer
+  ports:
+    - name: query
+      protocol: TCP
+      # node port is the port that will be exposed to the outside world
+      port: 4002
+      # target port is the port that the pod is listening to
+      targetPort: 4002
+  # selector is the label of the pod
+  selector:
+    app: query

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-depl
+spec:
+# number of pods to be created to run specified image
+  replicas: 1
+  # selector is used to find the pod that will be created
+  selector:
+  # find all pods with label app: moderation >> note app can be any name like saad : moderation
+    matchLabels:
+      app: moderation
+  # template is the pod definition
+  template:
+  # metadata is data about the pod
+    metadata:
+    # labels is the label of the pod
+      labels:
+        app: moderation
+    spec:
+    # containers is the list of containers that will be created inside the pod
+      containers:
+        - name: moderation
+          image: mostafasaad/moderation
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec:
+  type: ClusterIP
+  # type: NodePort
+  # type: LoadBalancer
+  ports:
+    - name: moderation
+      protocol: TCP
+      # node port is the port that will be exposed to the outside world
+      port: 4003
+      # target port is the port that the pod is listening to
+      targetPort: 4003
+  # selector is the label of the pod
+  selector:
+    app: moderation
