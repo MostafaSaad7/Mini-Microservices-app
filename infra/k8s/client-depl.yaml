@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+# number of pods to be created to run specified image
+  replicas: 1
+  # selector is used to find the pod that will be created
+  selector:
+  # find all pods with label app: client >> note app can be any name like saad : client
+    matchLabels:
+      app: client
+  # template is the pod definition
+  template:
+  # metadata is data about the pod
+    metadata:
+    # labels is the label of the pod
+      labels:
+        app: client
+    spec:
+    # containers is the list of containers that will be created inside the pod
+      containers:
+        - name: client
+          image: mostafasaad/client
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec:
+  type: ClusterIP
+  # type: NodePort
+  # type: LoadBalancer
+  ports:
+    - name: client
+      protocol: TCP
+      # node port is the port that will be exposed to the outside world
+      port: 3000
+      # target port is the port that the pod is listening to
+      targetPort: 3000
+  # selector is the label of the pod
+  selector:
+    app: client
